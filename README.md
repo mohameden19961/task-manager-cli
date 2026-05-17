@@ -217,39 +217,52 @@ Shows tasks that haven't been completed past their due date:
 - Days overdue
 - Category
 
-## 💾 Data Storage
+## 💾 Data Storage & Abstraction Layer
 
-Tasks are stored securely in: **`~/.task-manager/<username>.json`**
+This CLI features a modular data abstraction layer, allowing tasks to be stored in either a standard **JSON** file or a relational **SQLite** database.
+
+### 🔌 Storage Options:
+1. **JSON File (Default)**: Tasks are saved in a formatted JSON structure at `~/.task-manager/<username>.json`.
+2. **SQLite Database**: Tasks are saved as relational records at `~/.task-manager/<username>.db`.
+
+---
+
+### ⚙️ How to Configure Storage Mode:
+
+You can switch the active storage mode in two ways:
+
+#### 1. Via Configuration File (Persistent)
+Create or edit the configuration file at `~/.task-manager/config.json`:
+```json
+{
+  "storageType": "sqlite"
+}
+```
+*(Available choices: `"json"`, `"sqlite"`)*
+
+#### 2. Via Environment Variable (On-the-fly)
+Prefix your command with `TASK_STORAGE_TYPE`:
+```bash
+TASK_STORAGE_TYPE=sqlite task-manager list
+```
+
+---
 
 ### Security Features:
-✅ **Per-user isolation** - Each system user has completely separate task file  
-✅ **Restricted permissions** - Only owner can read/write (mode 0o600)  
-✅ **Private directory** - `.task-manager` folder inaccessible to others (mode 0o700)  
-✅ **No cross-user access** - Users cannot see other users' tasks  
+✅ **Per-user isolation** - Each system user has completely separate task file/database  
+✅ **Restricted permissions** - Only owner can read/write (strict mode `0o600` on both JSON and SQLite files)  
+✅ **Private directory** - `.task-manager` folder is strictly restricted to others (mode `0o700`)  
+✅ **No cross-user access** - Users cannot see or access other users' tasks  
 
 ### File Structure:
 ```
 ~/.task-manager/
-├── abdy.json           (only user 'abdy' can read/write)
+├── config.json         (global configurations)
+├── abdy.json           (only user 'abdy' can read/write - JSON mode)
+├── abdy.db             (only user 'abdy' can read/write - SQLite mode)
 ├── alice.json          (only user 'alice' can read/write)
-└── bob.json            (only user 'bob' can read/write)
+└── bob.db              (only user 'bob' can read/write)
 ```
-
-### Task JSON Format:
-```json
-{
-  "id": 1779031200002,
-  "title": "Buy groceries",
-  "category": "Shopping",
-  "priority": "high",
-  "completed": false,
-  "createdAt": "2026-05-17T14:53:20.002Z",
-  "dueDate": "2026-05-20",
-  "completedAt": null
-}
-```
-
-You can manually edit your task file if needed!
 
 ### Permission Details:
 ```bash

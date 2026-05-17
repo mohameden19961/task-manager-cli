@@ -1,13 +1,24 @@
 {
   "name": "task-manager-cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple command-line task manager",
   "main": "index.js",
+  "bin": {
+    "task-manager": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "task",
+    "manager",
+    "todo"
+  ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "@mohameden19961/auto-dockerize": "^1.0.10"
+  }
 }

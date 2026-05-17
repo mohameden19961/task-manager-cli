@@ -128,6 +128,40 @@ task-manager done 1779031200002
 task-manager delete 1779031200002
 ```
 
+## 🌐 Bulk Task Operations
+
+Manage multiple tasks at once with built-in safety confirmations:
+
+### Mark All Tasks as Completed
+```bash
+task-manager done-all
+```
+Marks all pending tasks as completed. Requires confirmation.
+
+### Reset All Tasks to Pending
+```bash
+task-manager reset
+```
+Marks all completed tasks back to pending. Requires confirmation.
+
+### Delete Only Completed Tasks
+```bash
+task-manager clear-done
+```
+Removes all completed tasks while keeping pending ones. Requires confirmation.
+
+### Delete ALL Tasks
+```bash
+task-manager clear
+```
+⚠️ **WARNING:** Permanently removes ALL tasks (both pending and completed). Requires confirmation.
+
+**Safety Feature:** All bulk operations ask for confirmation before executing to prevent accidental data loss:
+```
+⚠️  Attention: Vous allez supprimer TOUTES les 15 tâche(s)
+Are you sure? y/n
+```
+
 ### Analysis & Statistics
 
 ```bash
@@ -146,6 +180,9 @@ task-manager overdue
 # Show help
 task-manager help
 ```
+
+⚠️ **Note:** All bulk operations require confirmation (`y/n`) to prevent accidental data loss.
+
 
 ## 📊 Statistics Commands
 
@@ -493,6 +530,12 @@ Created with ❤️ for developers who love the terminal.
 | `categories` | `task-manager categories` |
 | `upcoming` | `task-manager upcoming` |
 | `overdue` | `task-manager overdue` |
+| `done-all` | `task-manager done-all` |
+| `reset` | `task-manager reset` |
+| `clear-done` | `task-manager clear-done` |
+| `clear` | `task-manager clear` |
 | `help` | `task-manager help` |
 
 **Pro Tip:** Use `task-manager upcoming` and `task-manager overdue` daily to stay on top of your tasks!
+
+**Bulk Operations:** Use `done-all`, `reset`, `clear-done`, and `clear` for rapid task management with safety confirmations!

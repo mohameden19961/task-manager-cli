@@ -329,36 +329,148 @@ function showStats() {
   console.log(`Progression: ${percentage}%\n`);
 }
 
+function askConfirmation(question) {
+  const readline = require('readline');
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise((resolve) => {
+    rl.question(`${colors.yellow}${question}${colors.reset} `, (answer) => {
+      rl.close();
+      resolve(answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes');
+    });
+  });
+}
+
+function clearAllTasks() {
+  const tasks = loadTasks();
+  
+  if (tasks.length === 0) {
+    console.log(`${colors.yellow}Aucune tâche à supprimer${colors.reset}`);
+    return;
+  }
+
+  console.log(`${colors.red}⚠️  Attention: Vous allez supprimer TOUTES les ${tasks.length} tâche(s)${colors.reset}`);
+  askConfirmation('Are you sure? y/n').then(confirmed => {
+    if (confirmed) {
+      saveTasks([]);
+      console.log(`${colors.red}✗${colors.reset} ${tasks.length} tâche(s) supprimée(s)`);
+    } else {
+      console.log(`${colors.gray}Opération annulée${colors.reset}`);
+    }
+  });
+}
+
+function clearCompletedTasks() {
+  const tasks = loadTasks();
+  const completed = tasks.filter(t => t.completed);
+  
+  if (completed.length === 0) {
+    console.log(`${colors.green}✓ Aucune tâche complétée à supprimer${colors.reset}`);
+    return;
+  }
+
+  console.log(`${colors.red}⚠️  Attention: Vous allez supprimer ${completed.length} tâche(s) complétée(s)${colors.reset}`);
+  askConfirmation('Are you sure? y/n').then(confirmed => {
+    if (confirmed) {
+      const remaining = tasks.filter(t => !t.completed);
+      saveTasks(remaining);
+      console.log(`${colors.red}✗${colors.reset} ${completed.length} tâche(s) complétée(s) supprimée(s)`);
+    } else {
+      console.log(`${colors.gray}Opération annulée${colors.reset}`);
+    }
+  });
+}
+
+function markAllCompleted() {
+  const tasks = loadTasks();
+  const pending = tasks.filter(t => !t.completed);
+  
+  if (pending.length === 0) {
+    console.log(`${colors.green}✓ Toutes les tâches sont déjà complétées${colors.reset}`);
+    return;
+  }
+
+  console.log(`${colors.yellow}ℹ️  Vous allez marquer ${pending.length} tâche(s) comme complétée(s)${colors.reset}`);
+  askConfirmation('Are you sure? y/n').then(confirmed => {
+    if (confirmed) {
+      const now = new Date().toISOString();
+      tasks.forEach(task => {
+        if (!task.completed) {
+          task.completed = true;
+          task.completedAt = now;
+        }
+      });
+      saveTasks(tasks);
+      console.log(`${colors.green}✓${colors.reset} ${pending.length} tâche(s) marquée(s) comme complétée(s)`);
+    } else {
+      console.log(`${colors.gray}Opération annulée${colors.reset}`);
+    }
+  });
+}
+
+function resetAllTasks() {
+  const tasks = loadTasks();
+  const completed = tasks.filter(t => t.completed);
+  
+  if (completed.length === 0) {
+    console.log(`${colors.green}✓ Toutes les tâches sont déjà en attente${colors.reset}`);
+    return;
+  }
+
+  console.log(`${colors.yellow}ℹ️  Vous allez marquer ${completed.length} tâche(s) comme non complétée(s)${colors.reset}`);
+  askConfirmation('Are you sure? y/n').then(confirmed => {
+    if (confirmed) {
+      tasks.forEach(task => {
+        task.completed = false;
+        task.completedAt = null;
+      });
+      saveTasks(tasks);
+      console.log(`${colors.green}✓${colors.reset} ${completed.length} tâche(s) marquée(s) comme non complétée(s)`);
+    } else {
+      console.log(`${colors.gray}Opération annulée${colors.reset}`);
+    }
+  });
+}
+
 function showHelp() {
-  console.log(`${colors.blue}Task Manager CLI${colors.reset}`);
-  console.log(`${colors.gray}Un gestionnaire de tâches sécurisé et puissant${colors.reset}\n`);
-  
-  console.log(`${colors.cyan}Commandes principales:${colors.reset}`);
-  console.log(`  add <title>                 - Ajouter une nouvelle tâche`);
-  console.log(`  list                        - Lister toutes les tâches`);
-  console.log(`  list <category>             - Lister par catégorie`);
-  console.log(`  view <task-id>              - Voir les détails d'une tâche`);
-  console.log(`  done <task-id>              - Marquer une tâche comme complétée`);
-  console.log(`  delete <task-id>            - Supprimer une tâche\n`);
-  
-  console.log(`${colors.cyan}Options pour 'add':${colors.reset}`);
-  console.log(`  -c, --category <cat>        - Définir la catégorie (défaut: General)`);
-  console.log(`  -d, --due <date>            - Définir l'échéance (format: YYYY-MM-DD)`);
-  console.log(`  -p, --priority <level>      - Priorité: low, medium, high\n`);
-  
-  console.log(`${colors.cyan}Commandes utiles:${colors.reset}`);
-  console.log(`  categories                  - Voir les statistiques par catégorie`);
-  console.log(`  overdue                     - Voir les tâches en retard`);
-  console.log(`  upcoming                    - Voir les tâches à venir`);
-  console.log(`  stats                       - Voir les statistiques générales`);
-  console.log(`  help                        - Afficher cette aide\n`);
-  
-  console.log(`${colors.cyan}Exemples:${colors.reset}`);
-  console.log(`  task-manager add "Faire les courses" -c Shopping -d 2026-05-20 -p high`);
-  console.log(`  task-manager list Work`);
-  console.log(`  task-manager view 1715949393581`);
-  console.log(`  task-manager done 1715949393581`);
-  console.log(`  task-manager overdue\n`);
+   console.log(`${colors.blue}Task Manager CLI${colors.reset}`);
+   console.log(`${colors.gray}Un gestionnaire de tâches sécurisé et puissant${colors.reset}\n`);
+   
+   console.log(`${colors.cyan}Commandes principales:${colors.reset}`);
+   console.log(`  add <title>                 - Ajouter une nouvelle tâche`);
+   console.log(`  list                        - Lister toutes les tâches`);
+   console.log(`  list <category>             - Lister par catégorie`);
+   console.log(`  view <task-id>              - Voir les détails d'une tâche`);
+   console.log(`  done <task-id>              - Marquer une tâche comme complétée`);
+   console.log(`  delete <task-id>            - Supprimer une tâche\n`);
+   
+   console.log(`${colors.cyan}Options pour 'add':${colors.reset}`);
+   console.log(`  -c, --category <cat>        - Définir la catégorie (défaut: General)`);
+   console.log(`  -d, --due <date>            - Définir l'échéance (format: YYYY-MM-DD)`);
+   console.log(`  -p, --priority <level>      - Priorité: low, medium, high\n`);
+   
+   console.log(`${colors.cyan}Commandes utiles:${colors.reset}`);
+   console.log(`  categories                  - Voir les statistiques par catégorie`);
+   console.log(`  overdue                     - Voir les tâches en retard`);
+   console.log(`  upcoming                    - Voir les tâches à venir`);
+   console.log(`  stats                       - Voir les statistiques générales`);
+   console.log(`  help                        - Afficher cette aide\n`);
+
+   console.log(`${colors.cyan}Commandes globales:${colors.reset}`);
+   console.log(`  clear                       - Supprimer TOUTES les tâches`);
+   console.log(`  clear-done                  - Supprimer les tâches complétées`);
+   console.log(`  done-all                    - Marquer TOUTES les tâches comme complétées`);
+   console.log(`  reset                       - Marquer TOUTES les tâches comme non complétées\n`);
+   
+   console.log(`${colors.cyan}Exemples:${colors.reset}`);
+   console.log(`  task-manager add "Faire les courses" -c Shopping -d 2026-05-20 -p high`);
+   console.log(`  task-manager list Work`);
+   console.log(`  task-manager view 1715949393581`);
+   console.log(`  task-manager done 1715949393581`);
+   console.log(`  task-manager overdue\n`);
 }
 
 // Main
@@ -393,6 +505,18 @@ switch (command) {
     break;
   case 'stats':
     showStats();
+    break;
+  case 'clear':
+    clearAllTasks();
+    break;
+  case 'clear-done':
+    clearCompletedTasks();
+    break;
+  case 'done-all':
+    markAllCompleted();
+    break;
+  case 'reset':
+    resetAllTasks();
     break;
   case 'help':
     showHelp();

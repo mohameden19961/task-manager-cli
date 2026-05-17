@@ -1,23 +1,40 @@
 {
-  "name": "task-manager-cli",
+  "name": "mohameden-task-manager-cli",
   "version": "1.0.0",
-  "description": "A simple command-line task manager",
+  "description": "A simple, fast, and powerful command-line task manager for developers",
   "main": "index.js",
   "bin": {
     "task-manager": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohameden19961/task-manager-cli.git"
   },
   "keywords": [
     "cli",
     "task",
     "manager",
-    "todo"
+    "todo",
+    "productivity",
+    "command-line",
+    "nodejs"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "mohameden19961",
+  "email": "your-email@example.com",
+  "license": "MIT",
   "type": "commonjs",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "index.js",
+    "README.md",
+    ".gitignore"
+  ],
   "devDependencies": {
     "@mohameden19961/auto-dockerize": "^1.0.10"
   }

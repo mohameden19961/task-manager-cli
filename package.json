@@ -23,8 +23,7 @@
     "command-line",
     "nodejs"
   ],
-  "author": "mohameden19961",
-  "email": "your-email@example.com",
+  "author": "mohameden19961 <abdymohameden439@gmail.com>",
   "license": "MIT",
   "type": "commonjs",
   "engines": {

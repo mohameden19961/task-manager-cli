@@ -1,0 +1,25 @@
+services:
+  task-manager-cli:
+    build: .
+    ports:
+      - "9001:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mysql://root:root@db:3306/appdb
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8
+    ports:
+      - "15000:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=appdb
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  db_data:

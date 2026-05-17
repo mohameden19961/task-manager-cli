@@ -1,192 +1,220 @@
 # Task Manager CLI
 
-A simple, fast, and powerful command-line task manager for developers.
+A simple, fast, and powerful command-line task manager with categories, priorities, and due dates.
 
-## Features
+## ✨ Features
 
-- ✨ **Simple** - Minimal, no unnecessary features
-- ⚡ **Fast** - Instant command execution
-- 💾 **Persistent** - Tasks saved in `~/.tasks.json`
-- 🎯 **Developer-friendly** - Perfect for terminal lovers
-- 🐳 **Dockerized** - Optional Docker support
-- 📦 **Zero dependencies** - Pure Node.js
+- 📋 **Task Management** - Add, complete, delete, and view tasks
+- 🏷️ **Categories** - Organize tasks by Work, Personal, Shopping, Learning, Health, Home, etc.
+- 🎯 **Priorities** - Set task priority (low, medium, high)
+- 📅 **Due Dates** - Track task deadlines with smart date formatting
+- 👤 **Per-user Isolation** - Each system user has separate, secure task storage
+- 🔒 **Security** - Restricted file permissions (0o600, 0o700)
+- 🔍 **Smart Filtering** - Filter tasks by category, view overdue/upcoming tasks
+- 📊 **Statistics** - Track progress with category breakdown and completion stats
+- 🎨 **Colored Output** - Beautiful terminal UI with emojis and colors
+- ⚡ **Zero Dependencies** - Pure Node.js, no npm dependencies needed
+- 🐳 **Docker Support** - Optional containerization
 
-## Installation
+## Quick Installation
 
-### Quick Setup (Recommended)
+### Option 1: Quick Setup (Recommended)
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/mohameden19961/task-manager-cli/master/install.sh)
+source ~/.zshrc  # or ~/.bashrc
 ```
 
-Or manually:
+### Option 2: Manual Installation
 ```bash
-# Clone the repository
 git clone https://github.com/mohameden19961/task-manager-cli.git
 cd task-manager-cli
-
-# Run the install script
 chmod +x install.sh
 ./install.sh
-
-# Reload your shell
-source ~/.zshrc  # or source ~/.bashrc
+source ~/.zshrc
 ```
 
-### After Installation
-You can use `task-manager` from anywhere:
+### Option 3: From anywhere with npx
 ```bash
-task-manager list
-task-manager add "Your task"
+npx mohameden-task-manager-cli add "Task title"
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
-# Add a task
-task-manager add "Learn Docker"
-
-# View all tasks
-task-manager list
-
-# Mark task as done (use the number from list)
-task-manager done 1
-
-# Delete a task
-task-manager delete 1
-
-# Get help
-task-manager
-```
-
-## Full Usage Guide
-
-### Add a Task
-```bash
+# Add a simple task
 task-manager add "Buy groceries"
-task-manager add "Finish project report"
-task-manager add "Call the dentist"
-```
 
-### List All Tasks
-```bash
-task-manager list
-```
+# Add a task with all options
+task-manager add "Project deadline" -c Work -d 2026-05-20 -p high
 
-Output example:
-```
-📋 Vos tâches:
-
-1. [○] Buy groceries
-2. [✓] Finish project report
-3. [○] Call the dentist
-```
-
-Legend:
-- `[○]` = Incomplete task
-- `[✓]` = Completed task
-- Number = Index (used for marking done/deleting)
-
-### Mark Task as Done
-```bash
-task-manager done 1
-```
-
-This will mark the first task as completed. The task remains in the list but marked with `[✓]`.
-
-### Delete a Task
-```bash
-task-manager delete 1
-```
-
-This permanently removes the first task from your list.
-
-### Get Help
-```bash
-task-manager
-```
-
-Shows all available commands.
-
-## Examples
-
-### Project Management
-```bash
-task-manager add "Design database schema"
-task-manager add "Set up API endpoints"
-task-manager add "Write unit tests"
-task-manager add "Deploy to production"
-
+# List all tasks
 task-manager list
 
-# As you complete tasks
-task-manager done 1
-task-manager done 2
-task-manager list
+# Filter tasks by category
+task-manager list Work
+
+# View task details
+task-manager view <task-id>
+
+# Mark as done
+task-manager done <task-id>
+
+# Delete task
+task-manager delete <task-id>
 ```
 
-### Shopping List
+## 📖 Complete Command Reference
+
+### Adding Tasks
+
 ```bash
-task-manager add "Eggs"
-task-manager add "Milk"
-task-manager add "Bread"
-task-manager add "Cheese"
-
-task-manager list
-
-# Mark as purchased
-task-manager done 1
-task-manager done 3
-```
-
-### Learning Goals
-```bash
+# Basic task
 task-manager add "Learn Node.js"
-task-manager add "Master Docker"
-task-manager add "Understand GraphQL"
-task-manager add "Study React Hooks"
 
-task-manager list
+# With category
+task-manager add "Buy milk" -c Shopping
+
+# With due date
+task-manager add "Submit report" -d 2026-05-20
+
+# With priority
+task-manager add "Critical bug fix" -p high
+
+# With everything
+task-manager add "Team meeting" -c Work -d 2026-05-18 -p high
 ```
 
-## Data Storage
+**Options for `add`:**
+- `-c, --category <name>` - Category (default: General)
+  - Work, Personal, Shopping, Learning, Health, Home
+- `-d, --due <date>` - Due date in format YYYY-MM-DD
+- `-p, --priority <level>` - Priority: low, medium, high
+
+### Listing Tasks
+
+```bash
+# List all tasks (grouped by category)
+task-manager list
+
+# Filter by category
+task-manager list Work
+task-manager list Shopping
+task-manager list Health
+```
+
+### View Task Details
+
+```bash
+task-manager view 1779031200002
+```
+
+Shows:
+- Title
+- ID
+- Status (Completed / Pending)
+- Priority
+- Category
+- Created date
+- Due date
+- Completion date (if completed)
+
+### Managing Tasks
+
+```bash
+# Mark task as completed
+task-manager done 1779031200002
+
+# Delete task
+task-manager delete 1779031200002
+```
+
+### Analysis & Statistics
+
+```bash
+# View all statistics
+task-manager stats
+
+# Show by category breakdown
+task-manager categories
+
+# Show tasks due today or soon
+task-manager upcoming
+
+# Show overdue tasks
+task-manager overdue
+
+# Show help
+task-manager help
+```
+
+## 📊 Statistics Commands
+
+### `stats` - Overall Statistics
+Shows:
+- Total tasks
+- Completed tasks
+- Pending tasks
+- Overdue tasks
+- Overall progress percentage
+
+### `categories` - Category Breakdown
+Shows completion percentage for each category:
+```
+📂 Catégories
+
+💼 Work: 5/10 (50%)
+🛒 Shopping: 2/3 (66%)
+📚 Learning: 1/1 (100%)
+```
+
+### `upcoming` - Tasks Due Soon
+Shows tasks due today or within 7 days with:
+- Task title
+- Days remaining
+- Category
+- Priority
+
+### `overdue` - Past Due Tasks
+Shows tasks that haven't been completed past their due date:
+- Task title
+- Days overdue
+- Category
+
+## 💾 Data Storage
 
 Tasks are stored securely in: **`~/.task-manager/<username>.json`**
 
-**Security Features:**
-- ✅ **Per-user isolation** - Each system user has their own separate task file
-- ✅ **Restricted permissions** - Only the owner can read/write their tasks (mode 0o600)
-- ✅ **Private directory** - `.task-manager` folder is only accessible to the owner (mode 0o700)
-- ✅ **No cross-user access** - Users cannot see or modify other users' tasks
+### Security Features:
+✅ **Per-user isolation** - Each system user has completely separate task file  
+✅ **Restricted permissions** - Only owner can read/write (mode 0o600)  
+✅ **Private directory** - `.task-manager` folder inaccessible to others (mode 0o700)  
+✅ **No cross-user access** - Users cannot see other users' tasks  
 
-Example file structure:
+### File Structure:
 ```
 ~/.task-manager/
-├── abdy.json          (only user 'abdy' can read/write)
-├── alice.json         (only user 'alice' can read/write)
-└── bob.json           (only user 'bob' can read/write)
+├── abdy.json           (only user 'abdy' can read/write)
+├── alice.json          (only user 'alice' can read/write)
+└── bob.json            (only user 'bob' can read/write)
 ```
 
-Each task contains:
-- `id`: Unique timestamp identifier
-- `title`: Task description
-- `completed`: Boolean status
-- `createdAt`: ISO 8601 timestamp
-
-**Example:**
+### Task JSON Format:
 ```json
-[
-  {
-    "id": 1715949393581,
-    "title": "Buy groceries",
-    "completed": false,
-    "createdAt": "2026-05-17T14:09:53.581Z"
-  }
-]
+{
+  "id": 1779031200002,
+  "title": "Buy groceries",
+  "category": "Shopping",
+  "priority": "high",
+  "completed": false,
+  "createdAt": "2026-05-17T14:53:20.002Z",
+  "dueDate": "2026-05-20",
+  "completedAt": null
+}
 ```
 
-You can manually edit your own task file if needed!
+You can manually edit your task file if needed!
 
-**Permission Details:**
+### Permission Details:
 ```bash
 # Directory permissions (only owner can access)
 drwx------   ~/.task-manager
@@ -195,43 +223,102 @@ drwx------   ~/.task-manager
 -rw-------   ~/.task-manager/username.json
 ```
 
-## Security
+## 🎨 UI Features
+
+### Color Coding:
+- 🔴 **Red** - High priority, overdue tasks, errors
+- 🟡 **Yellow** - Medium priority, today's date, tomorrow
+- 🟢 **Green** - Low priority, completed tasks
+- 🔵 **Blue** - Categories, main headings
+- 🔵 **Cyan** - Upcoming tasks, calendar info
+
+### Status Indicators:
+- `[✓]` - Task completed
+- `[○]` - Task pending/not completed
+
+### Category Emojis:
+- 💼 Work
+- 👤 Personal
+- 🛒 Shopping
+- 📚 Learning
+- 🏥 Health
+- 🏠 Home
+- ✓ General
+
+## 📚 Examples
+
+### Project Management
+```bash
+# Create project tasks
+task-manager add "Design database" -c Work -d 2026-05-25 -p high
+task-manager add "Implement API" -c Work -d 2026-05-28 -p high
+task-manager add "Write tests" -c Work -d 2026-05-30 -p medium
+task-manager add "Deploy" -c Work -d 2026-06-02 -p high
+
+# Track progress
+task-manager list Work
+task-manager stats
+task-manager categories
+
+# Update as you progress
+task-manager done 1779031200002
+task-manager list Work  # See updated progress
+```
+
+### Personal Planning
+```bash
+# Add personal tasks
+task-manager add "Learn TypeScript" -c Learning -d 2026-06-01
+task-manager add "Medical checkup" -c Health -d 2026-05-25 -p high
+task-manager add "Call mom" -c Personal -d 2026-05-20
+
+# Get today's tasks
+task-manager upcoming
+
+# View by category
+task-manager list Learning
+task-manager list Health
+```
+
+### Shopping List
+```bash
+task-manager add "Milk" -c Shopping -d 2026-05-18
+task-manager add "Eggs" -c Shopping -d 2026-05-18
+task-manager add "Bread" -c Shopping -d 2026-05-18
+
+task-manager list Shopping
+```
+
+## 🔐 Security
 
 This application takes security seriously:
 
 - **User Isolation**: Each system user has completely separate task storage
 - **File Permissions**: Task files are only readable/writable by their owner
 - **No Network Access**: All data stays on your local machine
-- **No Authentication Bypass**: You cannot access other users' tasks
-- **Secure Directory**: Task directory uses restrictive permissions (700)
+- **No Cross-user Access**: You cannot access other users' tasks
+- **Secure Directory**: Task directory uses restrictive permissions
 
-### Multi-user System Safety
-
-If multiple users share the same machine:
+### Multi-user System Example:
 ```bash
-# User 'alice' can only see their own tasks
+# User 'alice' can only see their tasks
 $ task-manager list
 📋 Vos tâches (Utilisateur: alice):
-1. [○] Alice's task 1
-2. [○] Alice's task 2
+
+💼 Work
+  1779031200001 [○] Alice's project
 
 # User 'bob' sees completely different tasks
-$ task-manager list
+$ task-manager list  
 📋 Vos tâches (Utilisateur: bob):
-1. [○] Bob's task 1
-2. [✓] Bob's completed task
+
+🛒 Shopping
+  1779031200005 [○] Bob's grocery list
 ```
 
-### Technical Details
+## 🐳 Docker Support
 
-- Task directory: `~/.task-manager/` (permissions: `drwx------`)
-- User task file: `~/.task-manager/{username}.json` (permissions: `-rw-------`)
-- OS-level user detection via `process.env.USER`
-- File operations use restrictive mode flags (0o700, 0o600)
-
-## Docker Support
-
-Run the application in a container:
+Run the application in a containerized environment:
 
 ```bash
 cd /tmp/opencode/task-manager-cli
@@ -243,25 +330,25 @@ This includes:
 - MySQL database container
 - Port mapping: 9001 (app) and 15000 (database)
 
-## System Requirements
+## ⚙️ System Requirements
 
 - **Node.js**: v14 or higher
 - **Operating System**: Linux, macOS, or Windows (WSL)
-- **Disk Space**: < 1MB (just the files)
+- **Disk Space**: < 1MB
+- **User Permissions**: Ability to create files in home directory
 
-## Troubleshooting
+## 🛠️ Troubleshooting
 
 ### Command not found
-If you get "command not found: task-manager":
 ```bash
-# Make sure PATH is updated
+# Verify PATH includes .local/bin
 echo $PATH | grep .local/bin
 
-# If not there, add it manually
+# If missing, add manually
 export PATH="$PATH:$HOME/.local/bin"
 
-# Test again
-task-manager list
+# Add to shell config
+echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.zshrc
 ```
 
 ### Permission denied
@@ -270,76 +357,124 @@ chmod +x ~/.local/bin/task-manager
 chmod +x /tmp/opencode/task-manager-cli/index.js
 ```
 
-### Cannot find tasks.json
-First run creates it automatically:
+### Tasks not found
 ```bash
+# First use creates the storage
 task-manager add "First task"
+
+# Check if files exist
+ls -la ~/.task-manager/
 ```
 
-## Project Structure
+### Date formatting issues
+```bash
+# Use YYYY-MM-DD format for dates
+task-manager add "Task" -d 2026-05-20  ✓ Correct
+task-manager add "Task" -d 05-20-2026  ✗ Wrong
+```
+
+## 📦 Project Structure
 
 ```
 task-manager-cli/
-├── index.js              # Main CLI application
+├── index.js              # Main application (380+ lines)
 ├── package.json          # Project metadata
-├── README.md            # This file
+├── README.md            # This documentation
 ├── Dockerfile           # Docker configuration
 ├── docker-compose.yml   # Docker Compose setup
 ├── install.sh           # Installation script
 └── .gitignore          # Git ignore rules
 ```
 
-## Contributing
+## 🚀 Advanced Usage
 
-Found a bug? Have a feature idea? Open an issue on GitHub!
-
-**Repository**: https://github.com/mohameden19961/task-manager-cli
-
-## Advanced Usage
-
-### Batch Operations
-```bash
-# Add multiple tasks quickly
-for task in "Email boss" "Review PR" "Update docs"; do
-  task-manager add "$task"
-done
-
-# List and check
-task-manager list
-```
-
-### Shell Alias (Optional)
-Add to your `.zshrc` or `.bashrc`:
+### Shell Alias (Make it shorter)
+Add to `~/.zshrc` or `~/.bashrc`:
 ```bash
 alias tm="task-manager"
+alias tl="task-manager list"
+alias ts="task-manager stats"
 ```
 
 Then use:
 ```bash
-tm add "New task"
-tm list
-tm done 1
+tm add "Task"
+tl Work
+ts
 ```
 
-### Combining with Other Tools
+### Batch Operations
 ```bash
-# Count total tasks
+# Add multiple tasks
+for task in "Email boss" "Review PR" "Update docs"; do
+  task-manager add "$task" -c Work
+done
+
+# Complete all Work tasks for a category
+task-manager list Work
+```
+
+### Scripting
+```bash
+#!/bin/bash
+# Daily standup script
+echo "📊 Daily Standup"
+task-manager upcoming
+task-manager stats
+```
+
+### Integration with other tools
+```bash
+# Export task list
+task-manager list > tasks_backup.txt
+
+# Count tasks
 task-manager list | wc -l
 
-# Export to file
-task-manager list > my_tasks.txt
-
-# Parse JSON directly
-cat ~/.tasks.json | jq '.[].title'
+# Parse with jq
+cat ~/.task-manager/$(whoami).json | jq '.[].title'
 ```
 
-## License
+## 🤝 Contributing
+
+Found a bug? Have a feature idea? Contributions are welcome!
+
+**Repository**: https://github.com/mohameden19961/task-manager-cli
+
+### Ideas for Contributions:
+- [ ] Task search functionality
+- [ ] Task tags system
+- [ ] Recurring tasks
+- [ ] Export to CSV/JSON
+- [ ] Web UI dashboard
+- [ ] Sync across devices
+- [ ] Task templates
+- [ ] Pomodoro timer integration
+
+## 📝 Changelog
+
+### v1.1.0 - Categories & Dates Release
+- ✨ Added task categories (Work, Shopping, Learning, etc.)
+- ✨ Added due dates with smart formatting
+- ✨ Added task priorities (low, medium, high)
+- ✨ Added filtering by category
+- ✨ Added statistics and analytics
+- ✨ Added upcoming/overdue task views
+- 🔒 Added per-user task isolation
+- 🎨 Enhanced UI with colors and emojis
+
+### v1.0.0 - Initial Release
+- Basic task management (add, list, done, delete)
+- Per-user security with file permissions
+- Persistent JSON storage
+
+## 📄 License
 
 MIT - Feel free to use, modify, and distribute!
 
-## Author
+## 👤 Author
 
-**mohameden19961**
+**mohameden19961** <abdymohameden439@gmail.com>
 
 Created with ❤️ for developers who love the terminal.
 
@@ -347,13 +482,17 @@ Created with ❤️ for developers who love the terminal.
 
 ## Quick Reference Card
 
-| Command | Description | Example |
-|---------|-------------|---------|
-| `task-manager add <title>` | Add new task | `task-manager add "Buy milk"` |
-| `task-manager list` | Show all tasks | `task-manager list` |
-| `task-manager done <n>` | Mark task as done | `task-manager done 1` |
-| `task-manager delete <n>` | Delete task | `task-manager delete 1` |
-| `task-manager` | Show help | `task-manager` |
+| Command | Example |
+|---------|---------|
+| `add` | `task-manager add "Task" -c Work -d 2026-05-20 -p high` |
+| `list` | `task-manager list` or `task-manager list Work` |
+| `view` | `task-manager view 1779031200002` |
+| `done` | `task-manager done 1779031200002` |
+| `delete` | `task-manager delete 1779031200002` |
+| `stats` | `task-manager stats` |
+| `categories` | `task-manager categories` |
+| `upcoming` | `task-manager upcoming` |
+| `overdue` | `task-manager overdue` |
+| `help` | `task-manager help` |
 
-**Pro Tip:** Use `task-manager list` frequently to keep track of your progress!
-
+**Pro Tip:** Use `task-manager upcoming` and `task-manager overdue` daily to stay on top of your tasks!

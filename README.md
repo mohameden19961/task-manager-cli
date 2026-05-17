@@ -150,7 +150,21 @@ task-manager list
 
 ## Data Storage
 
-Tasks are stored in: **`~/.tasks.json`**
+Tasks are stored securely in: **`~/.task-manager/<username>.json`**
+
+**Security Features:**
+- ✅ **Per-user isolation** - Each system user has their own separate task file
+- ✅ **Restricted permissions** - Only the owner can read/write their tasks (mode 0o600)
+- ✅ **Private directory** - `.task-manager` folder is only accessible to the owner (mode 0o700)
+- ✅ **No cross-user access** - Users cannot see or modify other users' tasks
+
+Example file structure:
+```
+~/.task-manager/
+├── abdy.json          (only user 'abdy' can read/write)
+├── alice.json         (only user 'alice' can read/write)
+└── bob.json           (only user 'bob' can read/write)
+```
 
 Each task contains:
 - `id`: Unique timestamp identifier
@@ -170,7 +184,50 @@ Each task contains:
 ]
 ```
 
-You can manually edit this file if needed!
+You can manually edit your own task file if needed!
+
+**Permission Details:**
+```bash
+# Directory permissions (only owner can access)
+drwx------   ~/.task-manager
+
+# File permissions (only owner can read/write)
+-rw-------   ~/.task-manager/username.json
+```
+
+## Security
+
+This application takes security seriously:
+
+- **User Isolation**: Each system user has completely separate task storage
+- **File Permissions**: Task files are only readable/writable by their owner
+- **No Network Access**: All data stays on your local machine
+- **No Authentication Bypass**: You cannot access other users' tasks
+- **Secure Directory**: Task directory uses restrictive permissions (700)
+
+### Multi-user System Safety
+
+If multiple users share the same machine:
+```bash
+# User 'alice' can only see their own tasks
+$ task-manager list
+📋 Vos tâches (Utilisateur: alice):
+1. [○] Alice's task 1
+2. [○] Alice's task 2
+
+# User 'bob' sees completely different tasks
+$ task-manager list
+📋 Vos tâches (Utilisateur: bob):
+1. [○] Bob's task 1
+2. [✓] Bob's completed task
+```
+
+### Technical Details
+
+- Task directory: `~/.task-manager/` (permissions: `drwx------`)
+- User task file: `~/.task-manager/{username}.json` (permissions: `-rw-------`)
+- OS-level user detection via `process.env.USER`
+- File operations use restrictive mode flags (0o700, 0o600)
 
 ## Docker Support
 
